@@ -1,0 +1,37 @@
+import pandas as pd
+df=pd.read_csv("customer_shopping_behavior.csv")
+print(df)
+print(df.iloc[:11])
+print(df)
+print(df.info())
+print(df.describe(include="all"))
+print(df.isna().sum())
+print(df)
+df['Review Rating']=pd.to_numeric(df['Review Rating'],errors='coerce')
+print(df)
+df['Review Rating']=df['Review Rating'].fillna(df['Review Rating'].median())
+print(df)
+print(df.isna().sum())
+df.columns=df.columns.str.lower()
+print(df)
+df.columns=df.columns.str.replace(" ","_")
+print(df)
+df=df.rename(columns={'purchase_amount_usd':'purchase_amount'})
+print(df)
+df.columns
+print(df)
+#create a column of age group#
+labels=['young adult','adult','middle aged','senior']
+df['age_group']=pd.qcut(df['age'],q=4,labels=labels)
+print(df)
+print(df[['age','age_group']].iloc[:11])
+#create a column_purchase_ frequency_days#
+frequency_mapping={'fortnightly':14,'weekly':7,'monthly':30,'quarterly':90,'bi-weekly':14,'annually':365,'every-3-months':90}
+df['frequency_of_purchases']=(df['frequency_of_purchases'].str.lower())
+df['purchase_frequency_days']=(df['frequency_of_purchases'].map(frequency_mapping))
+print(df[['purchase_frequency_days','frequency_of_purchases']].iloc[:11])
+print(df[['discount_applied','promo_code_used']].iloc[:11])
+print((df['discount_applied']==df['promo_code_used']).all())
+df=df.drop('promo_code_used',axis=1)
+print(df)
+print(df.columns)
